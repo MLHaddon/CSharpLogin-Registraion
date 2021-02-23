@@ -56,6 +56,10 @@ namespace LoginAndRegistration.Controllers
         [HttpGet("success")]
         public IActionResult Success()
         {
+            if (HttpContext.Session.GetInt32("UserID") == null)
+            {
+                return RedirectToAction("NotAuthorized");
+            }
             int userID = (int)HttpContext.Session.GetInt32("UserID");
             User user = _context.Users
                 .FirstOrDefault(u => u.UserID == userID);
@@ -93,6 +97,11 @@ namespace LoginAndRegistration.Controllers
             {
                 return View("Index");
             }
+        }
+
+        public IActionResult NotAuthorized(LoginUser user)
+        {
+                return View("Index");
         }
 
         [HttpGet("logout")]
